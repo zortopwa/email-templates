@@ -8,7 +8,7 @@ class BlockEdit{
     public function afterGetForm(Edit $subject, $result)
     {
         return $subject->getLayout()->createBlock(
-            \Zorto\EmailTemplate\Block\Adminhtml\Template\NewSletter\Edit\Form::class
+            \Zorto\EmailTemplate\Block\Adminhtml\Template\Newsletter\Edit\Form::class
         )->toHtml();
     }
 }

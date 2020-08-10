@@ -1,18 +1,16 @@
 <?php
 
-use Magento\Framework\App\TemplateTypesInterface;
-
-/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+/** @var $block \Zorto\EmailTemplate\Block\Adminhtml\Template\Newsletter\Edit */
 
 $_helper    = $this->helper(Zorto\EmailTemplate\Helper\Data::class);
 ?>
 <?php if (!$block->getRequest()->getParam('id')) : ?>
     <fieldset class="admin__fieldset form-inline">
         <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Cloud Templates')) ?></span></legend><br>
-        <div class="admin__field required">
+        <div class="admin__field">
             <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
             <div class="admin__field-control">
-                <select id="template_select" name="code" class="admin__control-select required-entry">
+                <select id="template_select" name="code" class="admin__control-select">
                     <?php foreach ($_helper->getNewsletterTemplateOptions() as $group => $options) : ?>
                         <?php if ($group) : ?>
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
@@ -27,11 +25,55 @@ $_helper    = $this->helper(Zorto\EmailTemplate\Helper\Data::class);
                 </select>
             </div>
         </div>
-        <div class="admin__field required">
+        <div class="admin__field">
             <span class="admin__field-label"></span>
             <div class="admin__field-control">
-                <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
+                <?= /* @noEscape */ $block->getButtonLoadCloudHtml() ?>
             </div>
         </div>
     </fieldset>
 <?php endif ?>
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert"
+    ], function(jQuery, alert) {
+        templateControl = {
+            unconvertedText: '',
+            typeChange: false,
+            variables: null,
+
+            events: {
+                'click [data-role=cloud-template-load]': 'loadCloud'
+            },
+
+            init: function () {
+                this.bindEvents();
+            },
+
+            bindEvents: function () {
+                var events = this.events,
+                    eventName,
+                    selector,
+                    callback,
+                    key;
+
+                for (key in events) {
+                    callback = this[events[key]];
+                    key = key.split(' ');
+
+                    eventName = key[0];
+                    selector = key.slice(1).join(' ');
+
+                    jQuery(selector).on(eventName, jQuery.proxy(callback, this));
+                }
+            },
+            loadCloud: function() {
+                alert({
+                    content: '<?= $block->escapeJs($block->escapeHtml(__('The template did not load. Please review the log for details.'))) ?>'
+                });
+            }
+        };
+        templateControl.init();
+    });
+</script>

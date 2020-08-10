@@ -1,5 +1,5 @@
 <?php
-namespace Zorto\EmailTemplate\Block\Adminhtml\Template\NewSletter\Edit;
+namespace Zorto\EmailTemplate\Block\Adminhtml\Template\Newsletter\Edit;
 
 use Magento\Newsletter\Block\Adminhtml\Template\Edit\Form as OriginalForm;
 
