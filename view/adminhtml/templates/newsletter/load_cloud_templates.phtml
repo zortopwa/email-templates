@@ -1,0 +1,37 @@
+<?php
+
+use Magento\Framework\App\TemplateTypesInterface;
+
+/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+
+$_helper    = $this->helper(Zorto\EmailTemplate\Helper\Data::class);
+?>
+<?php if (!$block->getRequest()->getParam('id')) : ?>
+    <fieldset class="admin__fieldset form-inline">
+        <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Cloud Templates')) ?></span></legend><br>
+        <div class="admin__field required">
+            <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
+            <div class="admin__field-control">
+                <select id="template_select" name="code" class="admin__control-select required-entry">
+                    <?php foreach ($_helper->getNewsletterTemplateOptions() as $group => $options) : ?>
+                        <?php if ($group) : ?>
+                            <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
+                        <?php endif; ?>
+                        <?php foreach ($options as $option) : ?>
+                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
+                        <?php endforeach; ?>
+                        <?php if ($group) : ?>
+                            </optgroup>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="admin__field required">
+            <span class="admin__field-label"></span>
+            <div class="admin__field-control">
+                <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
+            </div>
+        </div>
+    </fieldset>
+<?php endif ?>

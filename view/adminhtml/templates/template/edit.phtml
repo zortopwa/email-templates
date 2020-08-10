@@ -6,7 +6,9 @@
 
 use Magento\Framework\App\TemplateTypesInterface;
 
-/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+/** @var $block \Magento\Framework\View\Element\Template */
+
+$_helper    = $this->helper(Zorto\EmailTemplate\Helper\Data::class);
 ?>
 <?php if (!$block->getEditMode()) : ?>
 <form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
@@ -38,13 +40,14 @@ use Magento\Framework\App\TemplateTypesInterface;
             </div>
         </div>
     </fieldset>
+    <!-- Loading email template from cloud -->
     <fieldset class="admin__fieldset form-inline">
         <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Cloud Templates')) ?></span></legend><br>
-        <div class="admin__field required">
+        <div class="admin__field">
             <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
             <div class="admin__field-control">
-                <select id="template_select" name="code" class="admin__control-select required-entry">
-                    <?php foreach ($block->getTemplateOptions() as $group => $options) : ?>
+                <select id="cloud_template_select" name="cloud-email-code" class="admin__control-select">
+                    <?php foreach ($_helper->getEmailTemplateOptions() as $group => $options) : ?>
                         <?php if ($group) : ?>
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
@@ -58,13 +61,14 @@ use Magento\Framework\App\TemplateTypesInterface;
                 </select>
             </div>
         </div>
-        <div class="admin__field required">
+        <div class="admin__field">
             <span class="admin__field-label"></span>
             <div class="admin__field-control">
-                <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
+                <?= /* @noEscape */ $block->getButtonLoadCloudHtml() ?>
             </div>
         </div>
     </fieldset>
+    <!-- Endl loading email template from cloud -->
 </form>
 <?php endif ?>
 
@@ -109,7 +113,8 @@ require([
             'click [data-role=template-unstrip]' : 'unStripTags',
             'click [data-role=template-strip]' : 'stripTags',
             'click [data-role=template-delete]': 'deleteTemplate',
-            'click [data-role=template-load]': 'load'
+            'click [data-role=template-load]': 'load',
+            'click [data-role=cloud-template-load]': 'loadCloud'
         },
 
         init: function () {
@@ -294,6 +299,11 @@ require([
             if (this.variables) {
                 Variables.openVariableChooser(this.variables);
             }
+        },
+        loadCloud: function() {
+            alert({
+                content: '<?= $block->escapeJs($block->escapeHtml(__('The template did not load. Please review the log for details.'))) ?>'
+            });
         }
     };
 

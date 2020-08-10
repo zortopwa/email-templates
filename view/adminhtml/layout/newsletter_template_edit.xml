@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" before="template_edit" name="load_cloud_template" template="Zorto_EmailTemplate::template/test.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" before="template_edit" name="load_cloud_template" template="Zorto_EmailTemplate::newsletter/load_cloud_templates.phtml"/>
         </referenceContainer>
     </body>
 </page>
